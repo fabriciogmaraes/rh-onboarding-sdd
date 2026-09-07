@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { exigirPapel } from '@/lib/auth/papel'
 
 export default async function EquipesPage() {
+  await exigirPapel('rh')
   const supabase = await createClient()
 
   const { data: equipes } = await supabase

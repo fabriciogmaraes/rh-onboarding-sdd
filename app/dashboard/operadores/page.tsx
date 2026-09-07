@@ -2,8 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { StatusBadge } from '@/components/StatusBadge'
 import { Countdown } from '@/components/Countdown'
+import { exigirPapel } from '@/lib/auth/papel'
 
 export default async function OperadoresPage() {
+  await exigirPapel('rh')
   const supabase = await createClient()
 
   const { data: operadores, error } = await supabase

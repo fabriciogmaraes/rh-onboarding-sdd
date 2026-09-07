@@ -1,22 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { exigirPapel } from '@/lib/auth/papel'
 import { aprovarEAgendarCall } from '../operadores/[id]/actions'
 
 export default async function AprovacoesPage() {
+  const user = await exigirPapel('gestor')
   const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
-  const { data: usuario } = await supabase
-    .from('usuarios')
-    .select('papel')
-    .eq('id', user.id)
-    .single()
-
-  if (usuario?.papel !== 'gestor') {
-    return <div className="p-8">Essa área é exclusiva do Gestor.</div>
-  }
 
   const { data: operadores } = await supabase
     .from('operadores')
