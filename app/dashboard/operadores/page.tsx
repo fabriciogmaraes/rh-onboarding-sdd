@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { StatusBadge } from '@/components/StatusBadge'
+import { Countdown } from '@/components/Countdown'
 
 export default async function OperadoresPage() {
   const supabase = await createClient()
@@ -28,6 +30,7 @@ export default async function OperadoresPage() {
             <th className="p-2">Nome</th>
             <th className="p-2">E-mail pessoal</th>
             <th className="p-2">Status</th>
+            <th className="p-2">Prazo</th>
             <th className="p-2">Link de upload</th>
             <th className="p-2">Ações</th>
           </tr>
@@ -37,14 +40,23 @@ export default async function OperadoresPage() {
             <tr key={op.id} className="border-b">
               <td className="p-2">{op.nome_completo}</td>
               <td className="p-2">{op.email_pessoal}</td>
-              <td className="p-2">{op.status}</td>
+              <td className="p-2">
+                <StatusBadge status={op.status} />
+              </td>
+              <td className="p-2">
+                {op.status === 'pendente_documentacao' ? (
+                  <Countdown expiraEm={op.token_expira_em} />
+                ) : (
+                  <span className="text-gray-300 text-xs">—</span>
+                )}
+              </td>
               <td className="p-2">
                 {op.status === 'pendente_documentacao' ? (
                   <code className="text-xs bg-gray-100 px-2 py-1 rounded">
                     /upload/{op.token_upload}
                   </code>
                 ) : (
-                  <span className="text-gray-400 text-xs">—</span>
+                  <span className="text-gray-300 text-xs">—</span>
                 )}
               </td>
               <td className="p-2">
