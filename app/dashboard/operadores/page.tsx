@@ -29,6 +29,7 @@ export default async function OperadoresPage() {
             <th className="p-2">E-mail pessoal</th>
             <th className="p-2">Status</th>
             <th className="p-2">Link de upload</th>
+            <th className="p-2">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +46,11 @@ export default async function OperadoresPage() {
                 ) : (
                   <span className="text-gray-400 text-xs">—</span>
                 )}
+              </td>
+              <td className="p-2">
+                <Link href={`/dashboard/operadores/${op.id}`} className="text-blue-600 underline text-sm">
+                  Ver detalhes
+                </Link>
               </td>
             </tr>
           ))}
