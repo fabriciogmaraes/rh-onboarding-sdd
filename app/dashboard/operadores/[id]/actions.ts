@@ -2,21 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-
-function gerarEmailCorporativo(nomeCompleto: string): string {
-  const partes = nomeCompleto
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // remove acentos
-    .toLowerCase()
-    .trim()
-    .split(' ')
-    .filter(Boolean)
-
-  const primeiroNome = partes[0]
-  const ultimoNome = partes[partes.length - 1]
-
-  return `${primeiroNome}.${ultimoNome}@guimrh.com.br`
-}
+import { gerarEmailCorporativo, todosArquivosAprovados } from '@/lib/regras-negocio'
 
 export async function validarArquivo(formData: FormData) {
   const supabase = await createClient()
@@ -39,8 +25,7 @@ export async function validarArquivo(formData: FormData) {
     .select('status')
     .eq('operador_id', operadorId)
 
-  const todosAprovados =
-    arquivos && arquivos.length > 0 && arquivos.every((a) => a.status === 'aprovado')
+  const todosAprovados = todosArquivosAprovados(arquivos ?? [])
 
   if (todosAprovados) {
     const { data: operador } = await supabase

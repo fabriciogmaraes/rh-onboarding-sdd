@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
+import { tokenExpirado } from '@/lib/regras-negocio'
 
 const TIPOS = [
   { campo: 'arquivo_rg', tipo: 'RG' },
@@ -23,7 +24,7 @@ export async function enviarDocumentos(formData: FormData) {
     throw new Error('Token inválido')
   }
 
-  if (new Date(operador.token_expira_em) < new Date()) {
+  if (tokenExpirado(operador.token_expira_em)) {
     throw new Error('Token expirado')
   }
 
