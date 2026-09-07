@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
-import { validarArquivo } from './actions'
+import { validarArquivo, vincularEquipeCentroCusto } from './actions'
 import { StatusBadge } from '@/components/StatusBadge'
 
 export default async function OperadorDetalhePage({
@@ -29,6 +29,9 @@ export default async function OperadorDetalhePage({
     .from('arquivos')
     .select('*')
     .eq('operador_id', id)
+
+  const { data: equipes } = await supabase.from('equipes').select('id, nome')
+  const { data: centrosCusto } = await supabase.from('centros_custo').select('id, nome')
 
   const admin = createAdminClient()
   const arquivosComUrl = await Promise.all(
@@ -82,6 +85,31 @@ export default async function OperadorDetalhePage({
           </div>
         ))}
       </div>
+
+      {operador.status === 'aprovado' && (
+        <div className="border p-4 rounded mt-6 max-w-md">
+          <h2 className="font-medium mb-3">Vincular equipe e centro de custo</h2>
+          <form action={vincularEquipeCentroCusto} className="flex flex-col gap-3">
+            <input type="hidden" name="operador_id" value={operador.id} />
+
+            <select name="equipe_id" defaultValue={operador.equipe_id ?? ''} className="border p-2 rounded">
+              <option value="">Selecione a equipe</option>
+              {equipes?.map((eq) => (
+                <option key={eq.id} value={eq.id}>{eq.nome}</option>
+              ))}
+            </select>
+
+            <select name="centro_custo_id" defaultValue={operador.centro_custo_id ?? ''} className="border p-2 rounded">
+              <option value="">Selecione o centro de custo</option>
+              {centrosCusto?.map((c) => (
+                <option key={c.id} value={c.id}>{c.nome}</option>
+              ))}
+            </select>
+
+            <button className="bg-black text-white p-2 rounded">Salvar vínculo</button>
+          </form>
+        </div>
+      )}
     </div>
   )
 }

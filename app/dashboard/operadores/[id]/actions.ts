@@ -61,3 +61,54 @@ export async function validarArquivo(formData: FormData) {
   revalidatePath(`/dashboard/operadores/${operadorId}`)
   revalidatePath('/dashboard/operadores')
 }
+
+export async function vincularEquipeCentroCusto(formData: FormData) {
+  const supabase = await createClient()
+
+  const operadorId = formData.get('operador_id') as string
+  const equipeId = formData.get('equipe_id') as string
+  const centroCustoId = formData.get('centro_custo_id') as string
+
+  let gestorId: string | null = null
+  if (equipeId) {
+    const { data: equipe } = await supabase
+      .from('equipes')
+      .select('gestor_id')
+      .eq('id', equipeId)
+      .single()
+    gestorId = equipe?.gestor_id ?? null
+  }
+
+  const { error } = await supabase
+    .from('operadores')
+    .update({
+      equipe_id: equipeId || null,
+      centro_custo_id: centroCustoId || null,
+      gestor_id: gestorId,
+    })
+    .eq('id', operadorId)
+
+  if (error) throw new Error('Erro ao vincular: ' + error.message)
+
+  revalidatePath(`/dashboard/operadores/${operadorId}`)
+}
+
+export async function aprovarEAgendarCall(formData: FormData) {
+  const supabase = await createClient()
+
+  const operadorId = formData.get('operador_id') as string
+  const dataCall = formData.get('data_call') as string
+
+  const { error } = await supabase
+    .from('operadores')
+    .update({
+      data_call: new Date(dataCall).toISOString(),
+      status: 'ativo',
+    })
+    .eq('id', operadorId)
+
+  if (error) throw new Error('Erro ao aprovar: ' + error.message)
+
+  revalidatePath(`/dashboard/operadores/${operadorId}`)
+  revalidatePath('/dashboard/aprovacoes')
+}
