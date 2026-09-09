@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { validarArquivo, vincularEquipeCentroCusto } from './actions'
 import { StatusBadge } from '@/components/StatusBadge'
+import { nomeAmigavelDocumento } from '@/lib/rotulos'
 
 export default async function OperadorDetalhePage({
   params,
@@ -58,7 +59,7 @@ export default async function OperadorDetalhePage({
         {arquivosComUrl.map((arquivo) => (
           <div key={arquivo.id} className="border p-4 rounded flex items-center justify-between">
             <div className="flex flex-col gap-1">
-              <p className="font-medium">{arquivo.tipo_documento}</p>
+              <p className="font-medium">{nomeAmigavelDocumento(arquivo.tipo_documento)}</p>
               {arquivo.signedUrl && (
                 <a href={arquivo.signedUrl} target="_blank" className="text-blue-600 text-sm underline">
                   Ver arquivo
