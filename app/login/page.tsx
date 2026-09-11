@@ -6,30 +6,37 @@ export default function LoginPage({
   searchParams: { error?: string }
 }) {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <form action={login} className="flex w-80 flex-col gap-4">
-        <h1 className="text-xl font-bold">Login</h1>
-        {searchParams.error && (
-          <p className="text-sm text-red-600">E-mail ou senha inválidos.</p>
-        )}
-        <input
-          name="email"
-          type="email"
-          placeholder="E-mail"
-          required
-          className="border p-2 rounded"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Senha"
-          required
-          className="border p-2 rounded"
-        />
-        <button type="submit" className="bg-black text-white p-2 rounded">
-          Entrar
-        </button>
-      </form>
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="w-80">
+        <p className="text-xs tracking-wide text-muted mb-1">RH ONBOARDING</p>
+        <h1 className="text-2xl mb-6">Entrar</h1>
+
+        <form action={login} className="flex flex-col gap-3">
+          {searchParams.error && (
+            <p className="text-sm text-rose-600 -mt-1 mb-1">E-mail ou senha inválidos.</p>
+          )}
+          <input
+            name="email"
+            type="email"
+            placeholder="E-mail"
+            required
+            className="border border-black/15 bg-white p-2.5 rounded-md text-sm outline-none focus:border-navy"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Senha"
+            required
+            className="border border-black/15 bg-white p-2.5 rounded-md text-sm outline-none focus:border-navy"
+          />
+          <button
+            type="submit"
+            className="bg-navy text-white p-2.5 rounded-md text-sm font-medium mt-1 hover:bg-navy-dark transition-colors"
+          >
+            Entrar
+          </button>
+        </form>
+      </div>
     </div>
   )
 }

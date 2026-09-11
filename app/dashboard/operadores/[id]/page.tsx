@@ -46,22 +46,22 @@ export default async function OperadorDetalhePage({
 
   return (
     <div className="p-8">
-      <h1 className="text-xl font-bold mb-2">{operador.nome_completo}</h1>
+      <h1 className="text-2xl mb-2">{operador.nome_completo}</h1>
       <div className="flex items-center gap-2 mb-1">
-        <span className="text-sm text-gray-500">Status:</span>
+        <span className="text-sm text-muted">Status:</span>
         <StatusBadge status={operador.status} />
       </div>
       {operador.email_corporativo && (
-        <p className="text-sm text-gray-500 mb-6">E-mail corporativo: {operador.email_corporativo}</p>
+        <p className="text-sm text-muted mb-6">E-mail corporativo: {operador.email_corporativo}</p>
       )}
 
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-3 mt-4">
         {arquivosComUrl.map((arquivo) => (
-          <div key={arquivo.id} className="border p-4 rounded flex items-center justify-between">
+          <div key={arquivo.id} className="border border-black/10 bg-white p-4 rounded-lg flex items-center justify-between">
             <div className="flex flex-col gap-1">
               <p className="font-medium">{nomeAmigavelDocumento(arquivo.tipo_documento)}</p>
               {arquivo.signedUrl && (
-                <a href={arquivo.signedUrl} target="_blank" className="text-blue-600 text-sm underline">
+                <a href={arquivo.signedUrl} target="_blank" className="text-navy text-sm underline">
                   Ver arquivo
                 </a>
               )}
@@ -73,13 +73,13 @@ export default async function OperadorDetalhePage({
                   <input type="hidden" name="arquivo_id" value={arquivo.id} />
                   <input type="hidden" name="operador_id" value={operador.id} />
                   <input type="hidden" name="novo_status" value="aprovado" />
-                  <button className="bg-emerald-600 text-white px-3 py-1 rounded text-sm">Aprovar</button>
+                  <button className="bg-emerald-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-emerald-700 transition-colors">Aprovar</button>
                 </form>
                 <form action={validarArquivo}>
                   <input type="hidden" name="arquivo_id" value={arquivo.id} />
                   <input type="hidden" name="operador_id" value={operador.id} />
                   <input type="hidden" name="novo_status" value="reprovado" />
-                  <button className="bg-rose-600 text-white px-3 py-1 rounded text-sm">Reprovar</button>
+                  <button className="bg-rose-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-rose-700 transition-colors">Reprovar</button>
                 </form>
               </div>
             )}
@@ -88,26 +88,26 @@ export default async function OperadorDetalhePage({
       </div>
 
       {operador.status === 'aprovado' && (
-        <div className="border p-4 rounded mt-6 max-w-md">
+        <div className="border border-black/10 bg-white p-5 rounded-lg mt-6 max-w-md">
           <h2 className="font-medium mb-3">Vincular equipe e centro de custo</h2>
           <form action={vincularEquipeCentroCusto} className="flex flex-col gap-3">
             <input type="hidden" name="operador_id" value={operador.id} />
 
-            <select name="equipe_id" defaultValue={operador.equipe_id ?? ''} className="border p-2 rounded">
+            <select name="equipe_id" defaultValue={operador.equipe_id ?? ''} className="border border-black/15 p-2.5 rounded-md text-sm">
               <option value="">Selecione a equipe</option>
               {equipes?.map((eq) => (
                 <option key={eq.id} value={eq.id}>{eq.nome}</option>
               ))}
             </select>
 
-            <select name="centro_custo_id" defaultValue={operador.centro_custo_id ?? ''} className="border p-2 rounded">
+            <select name="centro_custo_id" defaultValue={operador.centro_custo_id ?? ''} className="border border-black/15 p-2.5 rounded-md text-sm">
               <option value="">Selecione o centro de custo</option>
               {centrosCusto?.map((c) => (
                 <option key={c.id} value={c.id}>{c.nome}</option>
               ))}
             </select>
 
-            <button className="bg-black text-white p-2 rounded">Salvar vínculo</button>
+            <button className="bg-navy text-white p-2.5 rounded-md text-sm font-medium hover:bg-navy-dark transition-colors">Salvar vínculo</button>
           </form>
         </div>
       )}
