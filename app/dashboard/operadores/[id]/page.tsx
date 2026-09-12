@@ -66,8 +66,11 @@ export default async function OperadorDetalhePage({
                 </a>
               )}
               <StatusBadge status={arquivo.status} />
+              {arquivo.status === 'reprovado' && (
+                <p className="text-xs text-muted">Aguardando reenvio do candidato. Aprove novamente ao receber.</p>
+              )}
             </div>
-            {arquivo.status === 'pendente' && (
+            {arquivo.status !== 'aprovado' && (
               <div className="flex gap-2">
                 <form action={validarArquivo}>
                   <input type="hidden" name="arquivo_id" value={arquivo.id} />

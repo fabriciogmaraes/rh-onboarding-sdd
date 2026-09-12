@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { gerarEmailCorporativo, todosArquivosAprovados } from '@/lib/regras-negocio'
+import { redirect } from 'next/navigation'
 
 export async function validarArquivo(formData: FormData) {
   const supabase = await createClient()
@@ -76,6 +77,7 @@ export async function vincularEquipeCentroCusto(formData: FormData) {
   if (error) throw new Error('Erro ao vincular: ' + error.message)
 
   revalidatePath(`/dashboard/operadores/${operadorId}`)
+  redirect('/dashboard/operadores')
 }
 
 export async function aprovarEAgendarCall(formData: FormData) {

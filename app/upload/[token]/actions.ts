@@ -32,6 +32,8 @@ export async function enviarDocumentos(formData: FormData) {
     const arquivo = formData.get(campo) as File
     if (!arquivo || arquivo.size === 0) continue
 
+    await supabase.from('arquivos').delete().eq('operador_id', operador.id).eq('tipo_documento', tipo)
+
     const caminho = `${operador.id}/${tipo}-${Date.now()}-${arquivo.name}`
 
     const { error: erroUpload } = await supabase.storage

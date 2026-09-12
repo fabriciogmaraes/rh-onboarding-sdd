@@ -1,10 +1,12 @@
 import { login } from './actions'
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { error?: string }
+  searchParams: Promise<{ error?: string }>
 }) {
+  const { error } = await searchParams
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-80">
@@ -12,7 +14,7 @@ export default function LoginPage({
         <h1 className="text-2xl mb-6">Entrar</h1>
 
         <form action={login} className="flex flex-col gap-3">
-          {searchParams.error && (
+          {error && (
             <p className="text-sm text-rose-600 -mt-1 mb-1">E-mail ou senha inválidos.</p>
           )}
           <input
